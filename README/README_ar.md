@@ -1,19 +1,18 @@
-<h1 align="center">مجزئ الفيديو</h1>
+<div dir="rtl" style="text-align: right; font-family: Arial, sans-serif;">
+<h1 align="right">مجزئ الفيديو</h1>
 
-<table>
+<table style="width:100%; border-collapse: collapse;">
 <tr>
-<td width="40%" align="center">
+<td style="width:40%; text-align:center; vertical-align:middle;">
   <img src="https://github.com/crrrowz/Video_Splitter/blob/main/README/app.png?raw=true" width="300" />
 </td>
-<td width="60%" valign="middle">
-
+<td style="width:60%; vertical-align:middle; padding:10px; text-align:right;">
 مجزئ الفيديو هو تطبيق فلاتر متعدد المنصات مصمم لمعالجة الفيديو المتقدمة. يتيح للمستخدمين تقسيم مقاطع الفيديو إلى مقاطع أصغر، وتعديل سرعة التشغيل، وتطبيق فلاتر (مثل التدرج الرمادي)، وإزالة الصوت، وتنفيذ تقليل ضوضاء الصوت. يتميز بخط أنابيب معالجة مرحلي، ودعم تسريع العتاد، وتبديل ديناميكي للسمات.
-
 </td>
 </tr>
 </table>
 
-## ✨ Main Features
+## ✨ الميزات الرئيسية
 
 - **تقسيم الفيديو**: تقسيم مقاطع الفيديو الطويلة إلى مقاطع أصغر بناءً على مدة محددة.
 
@@ -59,3 +58,4 @@ flutter pub get
 ```bash
 flutter run
 ```
+</div>
