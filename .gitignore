@@ -1,0 +1,23 @@
+# Build files
+/build/
+/android/build/
+/ios/Flutter/Flutter.framework/
+/ios/Flutter/Flutter.podspec
+
+# IDE files
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+
+# Android files
+/android/.gradle/
+/android/.kotlin/
+/android/app/build/
+/android/key.properties
+/android/app/google-services.json
+
+# iOS files
+/ios/Pods/
+/ios/Runner.xcworkspace/

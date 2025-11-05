@@ -1,0 +1,210 @@
+flutter pub get
+flutter run
+flutter clean
+flutter pub get
+flutter run
+gemini
+flutter run
+hi
+flutter clean
+flutter pub get
+flutter pub run flutter_launcher_icons
+flutter run
+flutter clean
+flutter pub get
+flutter build apk --release
+gemini
+flutter clean
+flutter pub get
+flutter build apk --release
+flutter clean
+flutter pub get
+flutter run
+flutter clean
+cd android
+./gradlew clean
+flutter pub get
+cd ..
+flutter pub get
+flutter build apk --release
+flutter clean
+flutter pub get
+flutter build apk --release
+flutter run
+flutter clean
+flutter pub get
+flutter run
+flutter clean
+flutter pub get
+flutter run
+flutter pub get
+flutter clean
+flutter pub get
+flutter clean
+flutter pub get
+flutter pub cache repair
+flutter clean
+flutter pub cache repair
+flutter pub get
+flutter pub outdated
+flutter pub get
+flutter run
+flutter clean
+flutter pub get
+flutter run
+flutter pub cache repair
+flutter run
+flutter clean
+flutter pub get
+flutter run
+flutter clean
+flutter pub get
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+cd android
+./gradlew clean
+cd ..
+flutter pub get
+flutter run
+./gradlew clean
+flutter clean
+flutter pub get
+flutter run
+gemini
+flutter clean
+flutter pub get
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter pub get
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter pub get
+flutter run
+flutter pub get
+flutter run
+flutter clean
+flutter pub get
+flutter run
+flutter pub cache repair
+flutter clean
+flutter pub get
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+cd android
+./gradlew clean
+cd ..
+flutter pub get
+flutter run
+cd android
+cd ..
+flutter clean
+flutter run
+flutter clean
+flutter run
+flutter clean
+flutter run
+   mkdir -p android/app/src/main/kotlin/com/videosplitter/app/
+   mkdir -p android/app/src/main/res/xml/
+rm -rf android/app/src/main/kotlin/com/example/
+flutter clean
+flutter pub get
+flutter pub run flutter_launcher_icons
+flutter run --debug
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+gemini
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter pub get
+flutter run --release
+flutter pub get
+flutter run --release
+flutter clean
+cd android./gradlew clean
+cd android ./gradlew clean
+cd android && ./gradlew clean
+cd android
+ ./gradlew clean
+cd ..
+flutter clean
+flutter pub get
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release

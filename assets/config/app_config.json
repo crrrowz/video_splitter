@@ -1,0 +1,43 @@
+{
+  "app_info": {
+    "name": "Video Splitter",
+    "package_name": "com.videosplitter.app",
+    "version": "1.0.0",
+    "build_number": 1,
+    "description": "Professional video splitting and processing tool"
+  },
+  "developer_info": {
+    "name": "Hassanein Hassan AlKhafaji",
+    "email": "admin@innovacode.org",
+    "website": "https://innovacode.org/crowz",
+    "company": "innovacode"
+  },
+  "app_settings": {
+    "default_segment_time": 60,
+    "default_speed": 1.0,
+    "default_video_bitrate": "4M",
+    "supported_formats": ["mp4", "mov", "avi"],
+    "max_video_duration": 3600,
+    "output_directory": "video_splitter"
+  },
+  "features": {
+    "video_splitting": true,
+    "speed_adjustment": true,
+    "grayscale_filter": true,
+    "audio_removal": true,
+    "hardware_acceleration": true
+  },
+  "permissions": {
+    "android": {
+      "read_media_video": true,
+      "read_media_images": true,
+      "read_external_storage": true,
+      "write_external_storage": true
+    }
+  },
+  "privacy": {
+    "collects_data": false,
+    "shares_data": false,
+    "stores_locally_only": true
+  }
+}
