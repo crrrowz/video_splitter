@@ -239,6 +239,18 @@ class _SettingsPageState extends State<SettingsPage> {
                       });
                     },
                   ),
+                  const Divider(height: 1),
+                  SwitchListTile(
+                    title: const Text('Force H.264 Re-encode'),
+                    subtitle: const Text('Standardize video to H.264 and copy audio'),
+                    secondary: const Icon(Icons.transform),
+                    value: widget.settings.forceH264,
+                    onChanged: (value) {
+                      setState(() {
+                        widget.settings.forceH264 = value;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),

@@ -13,18 +13,20 @@ class BasicVideoProcessor extends VideoProcessor {
 
   @override
   String buildCommand() {
-    // إعادة التشفير ضروري فقط إذا:
-    // - سرعة != 1.0
-    // - فلتر رمادي مفعل
+    // Re-encode video only if:
+    // - speed != 1.0
+    // - grayscale filter is applied
     final bool requiresVideoReEncode =
         settings.speed != 1.0 || settings.grayscaleFilter;
 
-    // إزالة الصوت فقط لا تحتاج لإعادة ترميز الفيديو
+    // Audio removal only does not need full video re-encode
     final bool requiresAudioRemovalOnly =
         settings.removeAudio && !requiresVideoReEncode;
 
     if (requiresVideoReEncode) {
       return _buildReEncodeCommand();
+    } else if (settings.forceH264) {
+      return _buildH264ForceCommand();
     } else if (requiresAudioRemovalOnly) {
       return _buildAudioRemovalCommand();
     } else {
@@ -32,7 +34,7 @@ class BasicVideoProcessor extends VideoProcessor {
     }
   }
 
-  /// إعادة التشفير فقط عند الحاجة
+  /// Re-encode video with optional speed and grayscale filters
   String _buildReEncodeCommand() {
     final List<String> vfFilters = [];
 
@@ -47,7 +49,8 @@ class BasicVideoProcessor extends VideoProcessor {
     final String vfCommand = vfFilters.join(',');
     final String audioCommand = settings.removeAudio ? '-an' : '';
 
-    const String videoCodec = '-c:v h264_mediacodec';
+    // Use libx264 for better quality control
+    const String videoCodec = '-c:v libx264 -preset veryfast -crf 23';
     const String audioCodec = '-c:a aac';
 
     if (settings.segmentTime > 0) {
@@ -70,7 +73,7 @@ class BasicVideoProcessor extends VideoProcessor {
     }
   }
 
-  /// نسخ مباشر سريع جدًا عند عدم وجود تغييرات
+  /// Fastest option: copy video/audio streams directly
   String _buildStreamCopyCommand() {
     if (settings.segmentTime > 0) {
       return '-y -i "$inputPath" '
@@ -87,7 +90,7 @@ class BasicVideoProcessor extends VideoProcessor {
     }
   }
 
-  /// إزالة الصوت فقط، نسخ الفيديو مباشرة
+  /// Remove audio only, copy video stream
   String _buildAudioRemovalCommand() {
     if (settings.segmentTime > 0) {
       return '-y -i "$inputPath" '
@@ -100,6 +103,28 @@ class BasicVideoProcessor extends VideoProcessor {
       return '-y -i "$inputPath" '
           '-c:v copy '
           '-an '
+          '-map 0 '
+          '"$outputPath"';
+    }
+  }
+
+  /// Force H.264 re-encode with controlled quality and copied audio
+  String _buildH264ForceCommand() {
+    // Use libx264 instead of h264_mediacodec for better quality
+    const String videoCodec = '-c:v libx264 -preset veryfast -crf 23';
+    const String audioCodec = '-c:a copy';
+
+    if (settings.segmentTime > 0) {
+      return '-y -i "$inputPath" '
+          '$videoCodec '
+          '$audioCodec '
+          '-f segment -segment_time ${settings.segmentTime} '
+          '-reset_timestamps 1 -map 0 '
+          '"$outputPath"';
+    } else {
+      return '-y -i "$inputPath" '
+          '$videoCodec '
+          '$audioCodec '
           '-map 0 '
           '"$outputPath"';
     }

@@ -61,7 +61,9 @@ class AppConfig {
           speedAdjustment: true,
           grayscaleFilter: true,
           audioRemoval: true,
+          noiseRemoval: true, // Restored field
           hardwareAcceleration: true,
+          backgroundRemoval: false, // Added field
         ),
         privacy: Privacy(
           collectsData: false,
@@ -152,6 +154,7 @@ class Features {
   final bool speedAdjustment;
   final bool grayscaleFilter;
   final bool audioRemoval;
+  final bool noiseRemoval;
   final bool hardwareAcceleration;
   final bool backgroundRemoval;
 
@@ -160,6 +163,7 @@ class Features {
     required this.speedAdjustment,
     required this.grayscaleFilter,
     required this.audioRemoval,
+    required this.noiseRemoval,
     required this.hardwareAcceleration,
     required this.backgroundRemoval,
   });
@@ -170,6 +174,7 @@ class Features {
       speedAdjustment: json['speed_adjustment'] ?? true,
       grayscaleFilter: json['grayscale_filter'] ?? true,
       audioRemoval: json['audio_removal'] ?? true,
+      noiseRemoval: json['noise_removal'] ?? true,
       hardwareAcceleration: json['hardware_acceleration'] ?? true,
       backgroundRemoval: json['background_removal'] ?? false,
     );

@@ -47,15 +47,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _checkInitialPermissions() async {
     if (Platform.isAndroid) {
-      final videosStatus = await Permission.videos.status;
-      final storageStatus = await Permission.storage.status;
-      final photosStatus = await Permission.photos.status;
-
-      debugPrint("=== Initial Permission Status ===");
-      debugPrint("Videos: $videosStatus");
-      debugPrint("Storage: $storageStatus");
-      debugPrint("Photos: $photosStatus");
-      debugPrint("===============================");
+      // Initial permission status checks are done, but we will not print them
+      // to the console as per user request.
+      await Permission.videos.status;
+      await Permission.storage.status;
+      await Permission.photos.status;
     }
   }
 
@@ -466,7 +462,7 @@ class _HomePageState extends State<HomePage> {
         'Success! ✅',
         'Video processing complete!\n\n'
             '🎹 Created $videoCount video segment${videoCount != 1 ? 's' : ''}\n'
-            '📁 Location: Movies/video_splitter/${p.basename(finalOutputDir.path)}\n\n'
+            '📁 Saved to: ${finalOutputDir.path}\n\n'
             'Videos should appear in your gallery shortly.',
       );
 
@@ -512,11 +508,21 @@ class _HomePageState extends State<HomePage> {
       minSilenceDuration: _settings.minSilenceDuration,
     );
 
+    // Add the command to the log
+    final command = processor.buildCommand();
+    setState(() {
+      _processingLog += 'FFmpeg command:\n$command\n\n';
+    });
+
     final result = await processor.execute(
       onLog: (log) {
-        setState(() {
-          _processingLog += log;
-        });
+        final message = log.toLowerCase();
+        // Only show error messages in the log
+        if (message.contains('error') || message.contains('failed') || message.contains('invalid')) {
+          setState(() {
+            _processingLog += log;
+          });
+        }
       },
       onProgress: (progress) {
         setState(() {
@@ -575,16 +581,21 @@ class _HomePageState extends State<HomePage> {
       threshold: _settings.backgroundThreshold,
     );
 
-    // Note: Background removal is currently a simple copy operation
+    // Add the command to the log
+    final command = processor.buildCommand();
     setState(() {
-      _processingLog += 'Note: Background removal is experimental. Currently performs video copy.\n';
+      _processingLog += 'FFmpeg command:\n$command\n\n';
     });
 
     final result = await processor.execute(
       onLog: (log) {
-        setState(() {
-          _processingLog += log;
-        });
+        final message = log.toLowerCase();
+        // Only show error messages in the log
+        if (message.contains('error') || message.contains('failed') || message.contains('invalid')) {
+          setState(() {
+            _processingLog += log;
+          });
+        }
       },
       onProgress: (progress) {
         setState(() {
@@ -633,11 +644,21 @@ class _HomePageState extends State<HomePage> {
       settings: _settings,
     );
 
+    // Add the command to the log
+    final command = processor.buildCommand();
+    setState(() {
+      _processingLog += 'FFmpeg command:\n$command\n\n';
+    });
+
     final result = await processor.execute(
       onLog: (log) {
-        setState(() {
-          _processingLog += log;
-        });
+        final message = log.toLowerCase();
+        // Only show error messages in the log
+        if (message.contains('error') || message.contains('failed') || message.contains('invalid')) {
+          setState(() {
+            _processingLog += log;
+          });
+        }
       },
       onProgress: (progress) {
         setState(() {
@@ -791,7 +812,25 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Processing Log', style: Theme.of(context).textTheme.titleLarge),
+                      Row(
+                        children: [
+                          Text('Processing Log', style: Theme.of(context).textTheme.titleLarge),
+                          const Spacer(),
+                          IconButton(
+                            icon: const Icon(Icons.content_copy),
+                            tooltip: 'Copy Log',
+                            onPressed: () {
+                              Clipboard.setData(ClipboardData(text: _processingLog));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Log copied to clipboard!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 16),
                       Container(
                         height: 200,

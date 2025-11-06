@@ -9,6 +9,7 @@ class AppSettings {
   bool removeAudio;
   String videoBitrate;
   bool grayscaleFilter;
+  bool forceH264;
   
   // NEW: Noise removal settings
   bool enableNoiseRemoval;
@@ -28,6 +29,7 @@ class AppSettings {
     this.removeAudio = false,
     this.videoBitrate = '4M',
     this.grayscaleFilter = false,
+    this.forceH264 = false,
     
     // Noise removal defaults
     this.enableNoiseRemoval = false,
@@ -49,6 +51,7 @@ class AppSettings {
       removeAudio: json['remove_audio'] as bool? ?? false,
       videoBitrate: json['video_bitrate'] as String? ?? '4M',
       grayscaleFilter: json['grayscale_filter'] as bool? ?? false,
+      forceH264: json['force_h264'] as bool? ?? false,
       
       // Noise removal settings
       enableNoiseRemoval: json['enable_noise_removal'] as bool? ?? false,
@@ -71,6 +74,7 @@ class AppSettings {
       'remove_audio': removeAudio,
       'video_bitrate': videoBitrate,
       'grayscale_filter': grayscaleFilter,
+      'force_h264': forceH264,
       
       // Noise removal settings
       'enable_noise_removal': enableNoiseRemoval,
