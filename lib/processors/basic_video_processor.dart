@@ -111,7 +111,7 @@ class BasicVideoProcessor extends VideoProcessor {
   /// Force H.264 re-encode with controlled quality and copied audio
   String _buildH264ForceCommand() {
     // Use libx264 instead of h264_mediacodec for better quality
-    const String videoCodec = '-c:v libx264 -preset veryfast -crf 23';
+    const String videoCodec = '-c:v libx264';
     const String audioCodec = '-c:a copy';
 
     if (settings.segmentTime > 0) {
