@@ -19,13 +19,11 @@ class BackgroundRemovalProcessor extends VideoProcessor {
 
   @override
   String buildCommand() {
-    // This is a complex multi-step process:
-    // 1. Analyse video frame by frame to detect solid backgrounds
-    // 2. Identify segments longer than minDuration
-    // 3. Create a filter to remove those segments
-    // 4. Apply the filter to create the final video
-    
-    return _buildBackgroundDetectionCommand();
+    // The background removal feature is experimental and incomplete.
+    // The detection logic is extremely slow and does not produce a final video.
+    // To prevent performance issues, this processor will currently perform a simple
+    // stream copy, effectively disabling the feature until it is fully implemented.
+    return '-y -i "$inputPath" -c copy "$outputPath"';
   }
 
   /// Build command to detect and remove solid background segments

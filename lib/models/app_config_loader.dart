@@ -153,6 +153,7 @@ class Features {
   final bool grayscaleFilter;
   final bool audioRemoval;
   final bool hardwareAcceleration;
+  final bool backgroundRemoval;
 
   Features({
     required this.videoSplitting,
@@ -160,6 +161,7 @@ class Features {
     required this.grayscaleFilter,
     required this.audioRemoval,
     required this.hardwareAcceleration,
+    required this.backgroundRemoval,
   });
 
   factory Features.fromJson(Map<String, dynamic> json) {
@@ -169,6 +171,7 @@ class Features {
       grayscaleFilter: json['grayscale_filter'] ?? true,
       audioRemoval: json['audio_removal'] ?? true,
       hardwareAcceleration: json['hardware_acceleration'] ?? true,
+      backgroundRemoval: json['background_removal'] ?? false,
     );
   }
 }

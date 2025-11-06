@@ -424,7 +424,7 @@ class _HomePageState extends State<HomePage> {
       int totalStages = _calculateTotalStages();
 
       // === STAGE 1: NOISE REMOVAL (if enabled) ===
-      if (_settings.enableNoiseRemoval) {
+      if (_settings.enableNoiseRemoval && widget.appConfig.features.noiseRemoval) {
         await _processNoiseRemoval(
           currentInput,
           finalOutputDir,
@@ -436,7 +436,7 @@ class _HomePageState extends State<HomePage> {
       }
 
       // === STAGE 2: BACKGROUND REMOVAL (if enabled) ===
-      if (_settings.enableBackgroundRemoval) {
+      if (_settings.enableBackgroundRemoval && widget.appConfig.features.backgroundRemoval) {
         await _processBackgroundRemoval(
           currentInput,
           finalOutputDir,
@@ -486,8 +486,8 @@ class _HomePageState extends State<HomePage> {
   /// Calculate total processing stages
   int _calculateTotalStages() {
     int stages = 1; // Basic processing always runs
-    if (_settings.enableNoiseRemoval) stages++;
-    if (_settings.enableBackgroundRemoval) stages++;
+    if (_settings.enableNoiseRemoval && widget.appConfig.features.noiseRemoval) stages++;
+    if (_settings.enableBackgroundRemoval && widget.appConfig.features.backgroundRemoval) stages++;
     return stages;
   }
 

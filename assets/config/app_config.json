@@ -25,7 +25,8 @@
     "speed_adjustment": true,
     "grayscale_filter": true,
     "audio_removal": true,
-    "hardware_acceleration": true
+    "hardware_acceleration": true,
+    "background_removal": false
   },
   "permissions": {
     "android": {

@@ -1,10 +1,10 @@
 import 'video_processor.dart';
 import '../models/app_settings.dart';
 
-/// Basic video processor for speed adjustment, filters, and splitting
+/// Optimized video processor: stream copy when possible, re-encode only if needed
 class BasicVideoProcessor extends VideoProcessor {
   final AppSettings settings;
-  
+
   BasicVideoProcessor({
     required super.inputPath,
     required super.outputPath,
@@ -13,35 +13,40 @@ class BasicVideoProcessor extends VideoProcessor {
 
   @override
   String buildCommand() {
-    // Check if any re-encoding is needed
-    final bool requiresReEncode =
-        settings.speed != 1.0 ||
-        settings.grayscaleFilter ||
-        settings.removeAudio;
+    // إعادة التشفير ضروري فقط إذا:
+    // - سرعة != 1.0
+    // - فلتر رمادي مفعل
+    final bool requiresVideoReEncode =
+        settings.speed != 1.0 || settings.grayscaleFilter;
 
-    if (requiresReEncode) {
+    // إزالة الصوت فقط لا تحتاج لإعادة ترميز الفيديو
+    final bool requiresAudioRemovalOnly =
+        settings.removeAudio && !requiresVideoReEncode;
+
+    if (requiresVideoReEncode) {
       return _buildReEncodeCommand();
+    } else if (requiresAudioRemovalOnly) {
+      return _buildAudioRemovalCommand();
     } else {
       return _buildStreamCopyCommand();
     }
   }
 
-  /// Build command with re-encoding (for filters and speed changes)
+  /// إعادة التشفير فقط عند الحاجة
   String _buildReEncodeCommand() {
     final List<String> vfFilters = [];
-    
-    // Speed filter
-    vfFilters.add('setpts=${(1.0 / settings.speed).toStringAsFixed(2)}*PTS');
-    
-    // Grayscale filter
+
+    if (settings.speed != 1.0) {
+      vfFilters.add('setpts=${(1.0 / settings.speed).toStringAsFixed(2)}*PTS');
+    }
+
     if (settings.grayscaleFilter) {
       vfFilters.add('format=gray');
     }
-    
+
     final String vfCommand = vfFilters.join(',');
     final String audioCommand = settings.removeAudio ? '-an' : '';
-    
-    // Use hardware acceleration
+
     const String videoCodec = '-c:v h264_mediacodec';
     const String audioCodec = '-c:a aac';
 
@@ -65,7 +70,7 @@ class BasicVideoProcessor extends VideoProcessor {
     }
   }
 
-  /// Build command with stream copy (fastest, no re-encoding)
+  /// نسخ مباشر سريع جدًا عند عدم وجود تغييرات
   String _buildStreamCopyCommand() {
     if (settings.segmentTime > 0) {
       return '-y -i "$inputPath" '
@@ -77,6 +82,24 @@ class BasicVideoProcessor extends VideoProcessor {
     } else {
       return '-y -i "$inputPath" '
           '-c copy '
+          '-map 0 '
+          '"$outputPath"';
+    }
+  }
+
+  /// إزالة الصوت فقط، نسخ الفيديو مباشرة
+  String _buildAudioRemovalCommand() {
+    if (settings.segmentTime > 0) {
+      return '-y -i "$inputPath" '
+          '-c:v copy '
+          '-an '
+          '-f segment -segment_time ${settings.segmentTime} '
+          '-reset_timestamps 1 -map 0 '
+          '"$outputPath"';
+    } else {
+      return '-y -i "$inputPath" '
+          '-c:v copy '
+          '-an '
           '-map 0 '
           '"$outputPath"';
     }

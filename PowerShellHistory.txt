@@ -208,3 +208,15 @@ flutter clean
 flutter run --release
 flutter clean
 flutter run --release
+gemini
+cd ..
+gemini
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release
+flutter clean
+flutter run --release

@@ -243,195 +243,160 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
 
-            // === NOISE REMOVAL SETTINGS ===
-            const SizedBox(height: 16),
-            Text('Noise Removal Settings', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-
-            Card(
-              child: Column(
-                children: [
-                  SwitchListTile(
-                    title: const Text('Enable Noise Removal'),
-                    subtitle: const Text('Automatically remove noisy audio segments'),
-                    secondary: const Icon(Icons.noise_control_off),
-                    value: widget.settings.enableNoiseRemoval,
-                    onChanged: null, // <-- معطل
-                  ),
-                  // الحقول الداخلية لن تظهر أبداً لأنه Switch معطل
-                ],
-              ),
-            ),
-
             const SizedBox(height: 24),
             const Divider(),
 
-            // === BACKGROUND REMOVAL SETTINGS ===
-            const SizedBox(height: 16),
-            Text('Background Removal Settings', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-
-            Card(
-              child: Column(
+            // === NOISE REMOVAL SETTINGS (conditionally rendered) ===
+            if (widget.appConfig.features.noiseRemoval)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SwitchListTile(
-                    title: const Text('Enable Background Removal'),
-                    subtitle: const Text('Remove segments with solid color backgrounds'),
-                    secondary: const Icon(Icons.blur_on),
-                    value: widget.settings.enableBackgroundRemoval,
-                    onChanged: null, // <-- معطل
+                  const SizedBox(height: 16),
+                  Text('Noise Removal Settings', style: Theme.of(context).textTheme.titleLarge),
+                  const SizedBox(height: 8),
+                  Card(
+                    child: Column(
+                      children: [
+                        SwitchListTile(
+                          title: const Text('Enable Noise Removal'),
+                          subtitle: const Text('Automatically remove noisy audio segments'),
+                          secondary: const Icon(Icons.noise_control_off),
+                          value: widget.settings.enableNoiseRemoval,
+                          onChanged: (value) {
+                            setState(() {
+                              widget.settings.enableNoiseRemoval = value;
+                            });
+                          },
+                        ),
+                        if (widget.settings.enableNoiseRemoval) ...[
+                          const Divider(height: 1),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                TextField(
+                                  controller: _noiseThresholdController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Noise Threshold (dB)',
+                                    helperText: 'Audio below this level is considered noise (e.g., -30)',
+                                    border: OutlineInputBorder(),
+                                    prefixIcon: Icon(Icons.graphic_eq),
+                                  ),
+                                  keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                                  onChanged: (value) {
+                                    widget.settings.noiseThreshold = double.tryParse(value) ?? -30.0;
+                                  },
+                                ),
+                                const SizedBox(height: 16),
+                                TextField(
+                                  controller: _silenceDurationController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Minimum Silence Duration (seconds)',
+                                    helperText: 'Minimum duration to consider as removable noise',
+                                    border: OutlineInputBorder(),
+                                    prefixIcon: Icon(Icons.timer),
+                                  ),
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  onChanged: (value) {
+                                    widget.settings.minSilenceDuration = double.tryParse(value) ?? 0.5;
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
-                  // الحقول الداخلية لن تظهر أبداً لأنه Switch معطل
                 ],
               ),
-            ),
+            const SizedBox(height: 24),
+            const Divider(),
 
-
-            // const SizedBox(height: 24),
-            // const Divider(),
-            //
-            // // === NOISE REMOVAL SETTINGS ===
-            // const SizedBox(height: 16),
-            // Text('Noise Removal Settings', style: Theme.of(context).textTheme.titleLarge),
-            // const SizedBox(height: 8),
-            //
-            // Card(
-            //   child: Column(
-            //     children: [
-            //       SwitchListTile(
-            //         title: const Text('Enable Noise Removal'),
-            //         subtitle: const Text('Automatically remove noisy audio segments'),
-            //         secondary: const Icon(Icons.noise_control_off),
-            //         value: widget.settings.enableNoiseRemoval,
-            //         onChanged: (value) {
-            //           setState(() {
-            //             widget.settings.enableNoiseRemoval = value;
-            //           });
-            //         },
-            //       ),
-            //       if (widget.settings.enableNoiseRemoval) ...[
-            //         const Divider(height: 1),
-            //         Padding(
-            //           padding: const EdgeInsets.all(16.0),
-            //           child: Column(
-            //             children: [
-            //               TextField(
-            //                 controller: _noiseThresholdController,
-            //                 decoration: const InputDecoration(
-            //                   labelText: 'Noise Threshold (dB)',
-            //                   helperText: 'Audio below this level is considered noise (e.g., -30)',
-            //                   border: OutlineInputBorder(),
-            //                   prefixIcon: Icon(Icons.graphic_eq),
-            //                 ),
-            //                 keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-            //                 onChanged: (value) {
-            //                   widget.settings.noiseThreshold = double.tryParse(value) ?? -30.0;
-            //                 },
-            //               ),
-            //               const SizedBox(height: 16),
-            //               TextField(
-            //                 controller: _silenceDurationController,
-            //                 decoration: const InputDecoration(
-            //                   labelText: 'Minimum Silence Duration (seconds)',
-            //                   helperText: 'Minimum duration to consider as removable noise',
-            //                   border: OutlineInputBorder(),
-            //                   prefixIcon: Icon(Icons.timer),
-            //                 ),
-            //                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            //                 onChanged: (value) {
-            //                   widget.settings.minSilenceDuration = double.tryParse(value) ?? 0.5;
-            //                 },
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       ],
-            //     ],
-            //   ),
-            // ),
-//
-            // const SizedBox(height: 24),
-            // const Divider(),
-            //
-            // // === BACKGROUND REMOVAL SETTINGS ===
-            // const SizedBox(height: 16),
-            // Text('Background Removal Settings', style: Theme.of(context).textTheme.titleLarge),
-            // const SizedBox(height: 8),
-            //
-            // Card(
-            //   child: Column(
-            //     children: [
-            //       SwitchListTile(
-            //         title: const Text('Enable Background Removal'),
-            //         subtitle: const Text('Remove segments with solid color backgrounds'),
-            //         secondary: const Icon(Icons.blur_on),
-            //         value: widget.settings.enableBackgroundRemoval,
-            //         onChanged: (value) {
-            //           setState(() {
-            //             widget.settings.enableBackgroundRemoval = value;
-            //           });
-            //         },
-            //       ),
-            //       if (widget.settings.enableBackgroundRemoval) ...[
-            //         const Divider(height: 1),
-            //         Padding(
-            //           padding: const EdgeInsets.all(16.0),
-            //           child: Column(
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             children: [
-            //               Text('Background Color', style: Theme.of(context).textTheme.titleSmall),
-            //               const SizedBox(height: 8),
-            //               SegmentedButton<BackgroundColorType>(
-            //                 segments: const [
-            //                   ButtonSegment(value: BackgroundColorType.white, label: Text('White'), icon: Icon(Icons.wb_sunny)),
-            //                   ButtonSegment(value: BackgroundColorType.black, label: Text('Black'), icon: Icon(Icons.brightness_2)),
-            //                   ButtonSegment(value: BackgroundColorType.green, label: Text('Green'), icon: Icon(Icons.nature)),
-            //                 ],
-            //                 selected: {widget.settings.backgroundColor},
-            //                 onSelectionChanged: (Set<BackgroundColorType> selected) {
-            //                   setState(() {
-            //                     widget.settings.backgroundColor = selected.first;
-            //                   });
-            //                 },
-            //               ),
-            //               const SizedBox(height: 16),
-            //               TextField(
-            //                 controller: _backgroundDurationController,
-            //                 decoration: const InputDecoration(
-            //                   labelText: 'Minimum Duration (seconds)',
-            //                   helperText: 'Minimum duration of background to remove (e.g., 3)',
-            //                   border: OutlineInputBorder(),
-            //                   prefixIcon: Icon(Icons.timer),
-            //                 ),
-            //                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            //                 onChanged: (value) {
-            //                   widget.settings.backgroundMinDuration = double.tryParse(value) ?? 3.0;
-            //                 },
-            //               ),
-            //               const SizedBox(height: 16),
-            //               Text('Detection Threshold: ${(widget.settings.backgroundThreshold * 100).toInt()}%',
-            //                    style: Theme.of(context).textTheme.titleSmall),
-            //               Slider(
-            //                 value: widget.settings.backgroundThreshold,
-            //                 min: 0.8,
-            //                 max: 1.0,
-            //                 divisions: 20,
-            //                 label: '${(widget.settings.backgroundThreshold * 100).toInt()}%',
-            //                 onChanged: (value) {
-            //                   setState(() {
-            //                     widget.settings.backgroundThreshold = value;
-            //                   });
-            //                 },
-            //               ),
-            //               Text('Higher values = more strict detection',
-            //                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic)),
-            //             ],
-            //           ),
-            //         ),
-            //       ],
-            //     ],
-            //   ),
-            // ),
+            // === BACKGROUND REMOVAL SETTINGS (conditionally rendered) ===
+            if (widget.appConfig.features.backgroundRemoval)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  Text('Background Removal Settings', style: Theme.of(context).textTheme.titleLarge),
+                  const SizedBox(height: 8),
+                  Card(
+                    child: Column(
+                      children: [
+                        SwitchListTile(
+                          title: const Text('Enable Background Removal'),
+                          subtitle: const Text('Remove segments with solid color backgrounds'),
+                          secondary: const Icon(Icons.blur_on),
+                          value: widget.settings.enableBackgroundRemoval,
+                          onChanged: (value) {
+                            setState(() {
+                              widget.settings.enableBackgroundRemoval = value;
+                            });
+                          },
+                        ),
+                        if (widget.settings.enableBackgroundRemoval) ...[
+                          const Divider(height: 1),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Background Color', style: Theme.of(context).textTheme.titleSmall),
+                                const SizedBox(height: 8),
+                                SegmentedButton<BackgroundColorType>(
+                                  segments: const [
+                                    ButtonSegment(value: BackgroundColorType.white, label: Text('White'), icon: Icon(Icons.wb_sunny)),
+                                    ButtonSegment(value: BackgroundColorType.black, label: Text('Black'), icon: Icon(Icons.brightness_2)),
+                                    ButtonSegment(value: BackgroundColorType.green, label: Text('Green'), icon: Icon(Icons.nature)),
+                                  ],
+                                  selected: {widget.settings.backgroundColor},
+                                  onSelectionChanged: (Set<BackgroundColorType> selected) {
+                                    setState(() {
+                                      widget.settings.backgroundColor = selected.first;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 16),
+                                TextField(
+                                  controller: _backgroundDurationController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Minimum Duration (seconds)',
+                                    helperText: 'Minimum duration of background to remove (e.g., 3)',
+                                    border: OutlineInputBorder(),
+                                    prefixIcon: Icon(Icons.timer),
+                                  ),
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  onChanged: (value) {
+                                    widget.settings.backgroundMinDuration = double.tryParse(value) ?? 3.0;
+                                  },
+                                ),
+                                const SizedBox(height: 16),
+                                Text('Detection Threshold: ${(widget.settings.backgroundThreshold * 100).toInt()}%',
+                                     style: Theme.of(context).textTheme.titleSmall),
+                                Slider(
+                                  value: widget.settings.backgroundThreshold,
+                                  min: 0.8,
+                                  max: 1.0,
+                                  divisions: 20,
+                                  label: '${(widget.settings.backgroundThreshold * 100).toInt()}%',
+                                  onChanged: (value) {
+                                    setState(() {
+                                      widget.settings.backgroundThreshold = value;
+                                    });
+                                  },
+                                ),
+                                Text('Higher values = more strict detection',
+                                     style: Theme.of(context).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
