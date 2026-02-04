@@ -232,3 +232,7 @@ flutter clean
 flutter run --release
 flutter clean
 flutter run --release
+cd 'd:\files\Android\Android_Projects\video_splitter'
+git add . && git commit -m "Docs: sync documentation with codebase, add CHANGELOG and CONTRIBUTING [Automated Commit]" && git push
+cd 'd:\files\Android\Android_Projects\video_splitter'
+git add .; git commit -m "Docs: sync documentation with codebase, add CHANGELOG and CONTRIBUTING [Automated Commit]"; git push
